@@ -1,10 +1,26 @@
 import { useState } from "react";
-import { HeartHandshake, Utensils, Users, Lock, Mail, Phone, MapPin, Building, ArrowRight } from "lucide-react";
+import { HeartHandshake, Utensils, Users, Lock, Mail, Phone, MapPin, Building, ArrowRight, Leaf } from "lucide-react";
 import { useApp } from "../context/AppContext";
+
+const ECO_FARM_ORG_TYPES = [
+  "Organic Farm",
+  "Cooperative Society",
+  "Agricultural Producer",
+  "Food Processing Unit",
+  "Community Farm",
+  "Urban Farm / Rooftop Garden",
+  "Dairy Farm",
+  "Poultry Farm",
+  "Fishery / Aquafarm",
+  "Fruit Orchard",
+  "Vegetable Farm",
+  "Herb Garden",
+  "Other"
+];
 
 export const LoginPage = () => {
   const { login } = useApp();
-  const [selectedRole, setSelectedRole] = useState("donor"); // "donor" or "receiver"
+  const [selectedRole, setSelectedRole] = useState("donor"); // "donor" | "receiver" | "ecofarm"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,6 +37,14 @@ export const LoginPage = () => {
     phone: ""
   });
 
+  // Eco-Farm specific details
+  const [ecoFarmDetails, setEcoFarmDetails] = useState({
+    name: "",
+    orgType: "Organic Farm",
+    phone: "",
+    address: ""
+  });
+
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
@@ -34,7 +58,7 @@ export const LoginPage = () => {
 
     if (selectedRole === "receiver") {
       if (!receiverDetails.orgName.trim() || !receiverDetails.phone.trim() || !receiverDetails.address.trim()) {
-        setError("Receivers must provide Organization Name, Phone Number, and Address.");
+        setError("Receivers must provide Organisation Name, Phone Number, and Address.");
         return;
       }
       login("receiver", email, password, {
@@ -42,6 +66,17 @@ export const LoginPage = () => {
         phone: receiverDetails.phone,
         address: receiverDetails.address,
         name: receiverDetails.orgName
+      });
+    } else if (selectedRole === "ecofarm") {
+      if (!ecoFarmDetails.name.trim() || !ecoFarmDetails.phone.trim() || !ecoFarmDetails.address.trim()) {
+        setError("Eco-Farm partners must provide Name, Contact Details, and Address.");
+        return;
+      }
+      login("ecofarm", email, password, {
+        name: ecoFarmDetails.name,
+        orgType: ecoFarmDetails.orgType,
+        phone: ecoFarmDetails.phone,
+        address: ecoFarmDetails.address
       });
     } else {
       login("donor", email, password, {
@@ -64,23 +99,24 @@ export const LoginPage = () => {
           <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 600 }}>Save Food. Share Hope.</p>
         </div>
 
-        {/* Role Selector Tabs (Donor vs Receiver) */}
+        {/* Role Selector Tabs (Donor | Receiver | Eco-Farm) */}
         <div style={{ marginBottom: "1.5rem" }}>
           <label className="form-label" style={{ textAlign: "center", marginBottom: "0.6rem" }}>
             Select Your Account Type:
           </label>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.6rem" }}>
+            {/* Food Donor */}
             <button
               type="button"
               onClick={() => setSelectedRole("donor")}
               style={{
-                padding: "0.9rem",
+                padding: "0.85rem 0.5rem",
                 borderRadius: "12px",
                 border: selectedRole === "donor" ? "2px solid var(--primary-600)" : "1px solid var(--border-color)",
                 background: selectedRole === "donor" ? "var(--primary-50)" : "var(--bg-card)",
                 color: selectedRole === "donor" ? "var(--primary-800)" : "var(--text-muted)",
                 fontWeight: 800,
-                fontSize: "0.95rem",
+                fontSize: "0.82rem",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -89,22 +125,23 @@ export const LoginPage = () => {
                 transition: "all 0.2s"
               }}
             >
-              <Utensils size={24} color={selectedRole === "donor" ? "var(--primary-600)" : "var(--text-muted)"} />
+              <Utensils size={22} color={selectedRole === "donor" ? "var(--primary-600)" : "var(--text-muted)"} />
               <span>Food Donor</span>
-              <span style={{ fontSize: "0.7rem", fontWeight: 500, opacity: 0.8 }}>Restaurant, Hotel, Mart</span>
+              <span style={{ fontSize: "0.65rem", fontWeight: 500, opacity: 0.8 }}>Restaurant, Hotel</span>
             </button>
 
+            {/* Food Receiver */}
             <button
               type="button"
               onClick={() => setSelectedRole("receiver")}
               style={{
-                padding: "0.9rem",
+                padding: "0.85rem 0.5rem",
                 borderRadius: "12px",
                 border: selectedRole === "receiver" ? "2px solid var(--primary-600)" : "1px solid var(--border-color)",
                 background: selectedRole === "receiver" ? "var(--primary-50)" : "var(--bg-card)",
                 color: selectedRole === "receiver" ? "var(--primary-800)" : "var(--text-muted)",
                 fontWeight: 800,
-                fontSize: "0.95rem",
+                fontSize: "0.82rem",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -113,9 +150,34 @@ export const LoginPage = () => {
                 transition: "all 0.2s"
               }}
             >
-              <Users size={24} color={selectedRole === "receiver" ? "var(--primary-600)" : "var(--text-muted)"} />
+              <Users size={22} color={selectedRole === "receiver" ? "var(--primary-600)" : "var(--text-muted)"} />
               <span>Food Receiver</span>
-              <span style={{ fontSize: "0.7rem", fontWeight: 500, opacity: 0.8 }}>NGO, Shelter, Charity</span>
+              <span style={{ fontSize: "0.65rem", fontWeight: 500, opacity: 0.8 }}>NGO, Shelter</span>
+            </button>
+
+            {/* Eco-Farm */}
+            <button
+              type="button"
+              onClick={() => setSelectedRole("ecofarm")}
+              style={{
+                padding: "0.85rem 0.5rem",
+                borderRadius: "12px",
+                border: selectedRole === "ecofarm" ? "2px solid #16a34a" : "1px solid var(--border-color)",
+                background: selectedRole === "ecofarm" ? "#dcfce7" : "var(--bg-card)",
+                color: selectedRole === "ecofarm" ? "#166534" : "var(--text-muted)",
+                fontWeight: 800,
+                fontSize: "0.82rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.35rem",
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              <Leaf size={22} color={selectedRole === "ecofarm" ? "#16a34a" : "var(--text-muted)"} />
+              <span>Eco-Farm</span>
+              <span style={{ fontSize: "0.65rem", fontWeight: 500, opacity: 0.8 }}>Farm, Cooperative</span>
             </button>
           </div>
         </div>
@@ -162,6 +224,83 @@ export const LoginPage = () => {
               />
             </div>
           </div>
+
+          {/* Conditional Eco-Farm Details */}
+          {selectedRole === "ecofarm" && (
+            <div style={{ background: "#f0fdf4", padding: "1rem", borderRadius: "12px", border: "1px solid #86efac", marginBottom: "1.25rem" }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "#166534", textTransform: "uppercase", marginBottom: "0.75rem" }}>
+                🌿 Eco-Farm Partner Details
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Farm / Organisation Name *</label>
+                <div style={{ position: "relative" }}>
+                  <Building size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    style={{ paddingLeft: "2.4rem" }}
+                    placeholder="e.g. Green Roots Organic Farm"
+                    value={ecoFarmDetails.name}
+                    onChange={e => setEcoFarmDetails({ ...ecoFarmDetails, name: e.target.value })}
+                    autoComplete="off"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Type of Organisation *</label>
+                <div style={{ position: "relative" }}>
+                  <Leaf size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#16a34a" }} />
+                  <select
+                    className="form-control"
+                    style={{ paddingLeft: "2.4rem" }}
+                    value={ecoFarmDetails.orgType}
+                    onChange={e => setEcoFarmDetails({ ...ecoFarmDetails, orgType: e.target.value })}
+                  >
+                    {ECO_FARM_ORG_TYPES.map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Contact Phone *</label>
+                <div style={{ position: "relative" }}>
+                  <Phone size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                  <input
+                    type="tel"
+                    className="form-control"
+                    style={{ paddingLeft: "2.4rem" }}
+                    placeholder="e.g. +91 98765 11223"
+                    value={ecoFarmDetails.phone}
+                    onChange={e => setEcoFarmDetails({ ...ecoFarmDetails, phone: e.target.value })}
+                    autoComplete="off"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">Farm Address / Location *</label>
+                <div style={{ position: "relative" }}>
+                  <MapPin size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                  <input
+                    type="text"
+                    className="form-control"
+                    style={{ paddingLeft: "2.4rem" }}
+                    placeholder="e.g. Hesaraghatta Road, Bangalore"
+                    value={ecoFarmDetails.address}
+                    onChange={e => setEcoFarmDetails({ ...ecoFarmDetails, address: e.target.value })}
+                    autoComplete="off"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Conditional Receiver Details (Organisation Name, Phone, Address) */}
           {selectedRole === "receiver" && (
@@ -261,7 +400,7 @@ export const LoginPage = () => {
             className="btn btn-primary btn-lg" 
             style={{ width: "100%", marginTop: "0.5rem" }}
           >
-            <span>Continue as {selectedRole === "donor" ? "Food Donor" : "Food Receiver"}</span>
+            <span>Continue as {selectedRole === "donor" ? "Food Donor" : selectedRole === "receiver" ? "Food Receiver" : "Eco-Farm Partner"}</span>
             <ArrowRight size={18} />
           </button>
         </form>

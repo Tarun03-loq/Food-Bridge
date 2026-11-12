@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { DonorPage } from "./pages/DonorPage";
 import { ReceiverPage } from "./pages/ReceiverPage";
 import { NearbyNgosMap } from "./pages/NearbyNgosMap";
+import { EcoFarmPage } from "./pages/EcoFarmPage";
 import { 
   HeartHandshake, 
   LogOut, 
@@ -13,7 +14,8 @@ import {
   Palette,
   Check,
   Building2,
-  RefreshCw
+  RefreshCw,
+  Leaf
 } from "lucide-react";
 
 export function App() {
@@ -41,6 +43,12 @@ export function App() {
   }
 
   const isDonor = currentUser.role === "donor";
+  const isEcoFarm = currentUser.role === "ecofarm";
+
+  // Eco-Farm gets its own full-page UI (header + tabs are inside EcoFarmPage)
+  if (isEcoFarm) {
+    return <EcoFarmPage />;
+  }
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--bg-main)" }}>
@@ -180,7 +188,7 @@ export function App() {
               {currentUser.name || currentUser.orgName}
             </div>
             <div style={{ fontSize: "0.72rem", color: "var(--primary-600)", fontWeight: 700, textTransform: "uppercase" }}>
-              ● {currentUser.role === "donor" ? "Food Donor" : "Food Receiver"}
+              ● {currentUser.role === "donor" ? "Food Donor" : currentUser.role === "ecofarm" ? "🌿 Eco-Farm" : "Food Receiver"}
             </div>
           </div>
 

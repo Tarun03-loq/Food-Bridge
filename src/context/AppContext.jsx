@@ -161,11 +161,16 @@ export const AppProvider = ({ children }) => {
 
   const login = (role, email, password, details = {}) => {
     const user = {
-      role, // 'donor' or 'receiver'
+      role, // 'donor' | 'receiver' | 'ecofarm'
       email: email.trim(),
-      name: details.name || (role === "donor" ? (details.businessName || "Restaurant / Donor Partner") : (details.orgName || "Food Relief Organization")),
+      name: details.name || (role === "donor"
+        ? (details.businessName || "Restaurant / Donor Partner")
+        : role === "ecofarm"
+          ? (details.name || "Eco-Farm Partner")
+          : (details.orgName || "Food Relief Organization")),
       businessName: details.businessName || (role === "donor" ? "Registered Food Donor" : ""),
-      orgName: details.orgName || (role === "receiver" ? "Hope Feeding Trust" : "Green Palace Banquet"),
+      orgName: details.orgName || (role === "receiver" ? "Hope Feeding Trust" : ""),
+      orgType: details.orgType || (role === "ecofarm" ? "Organic Farm" : ""),
       phone: details.phone || "+91 98765 43210",
       address: details.address || "Bangalore Central, Karnataka"
     };
