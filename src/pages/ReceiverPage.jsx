@@ -21,13 +21,29 @@ import { useApp } from "../context/AppContext";
 export const ReceiverPage = () => {
   const { currentUser, donations, acceptFoodRequest, completeDonation } = useApp();
 
+  // Helper: returns urgency badge props for a donation nearing its expiry
+  const getExpiryUrgency = (expiryStr) => {
+    if (!expiryStr) return null;
+    const msLeft = new Date(expiryStr).getTime() - Date.now();
+    const hoursLeft = msLeft / 3600000;
+    if (hoursLeft <= 0) return { label: "⛔ Expired", bg: "#fee2e2", color: "#b91c1c" };
+    if (hoursLeft <= 1) return { label: "⚠️ Expires in < 1 h — Urgent!", bg: "#fef3c7", color: "#92400e" };
+    if (hoursLeft <= 2) return { label: `⚠️ Expires in ~${Math.ceil(hoursLeft)} h`, bg: "#fef9c3", color: "#854d0e" };
+    return null;
+  };
+
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [deliveryFilter, setDeliveryFilter] = useState("all"); // "all", "Delivery by Own", "Pickup by NGO"
   const [activeTab, setActiveTab] = useState("available"); // "available" or "accepted"
 
-  const availableDonations = donations.filter(d => d.status === "Available");
+  // Only show non-expired available donations – expired ones vanish automatically
+  const now = Date.now();
+  const availableDonations = donations.filter(d =>
+    d.status === "Available" &&
+    (!d.dateTimeExpiry || new Date(d.dateTimeExpiry).getTime() > now)
+  );
   const acceptedDonations = donations.filter(d => d.status === "Accepted by Receiver" || d.status.includes("Delivered"));
 
   const filteredAvailable = availableDonations.filter(d => {
@@ -188,17 +204,25 @@ export const ReceiverPage = () => {
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {filteredAvailable.map(item => (
-                <div key={item.id} className="fb-card" style={{ padding: "1.25rem", borderLeft: "5px solid var(--primary-600)" }}>
+              {filteredAvailable.map(item => {
+                const urgency = getExpiryUrgency(item.dateTimeExpiry);
+                return (
+                <div key={item.id} className="fb-card" style={{ padding: "1.25rem", borderLeft: `5px solid ${urgency && urgency.color === "#b91c1c" ? "#b91c1c" : urgency ? "#d97706" : "var(--primary-600)"}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
                         <span style={{ fontSize: "0.75rem", fontWeight: 800, background: "#dcfce7", color: "#15803d", padding: "0.2rem 0.6rem", borderRadius: "9999px" }}>
                           ● Available
                         </span>
                         <span style={{ fontSize: "0.75rem", fontWeight: 800, background: item.deliveryMode === "Delivery by Own" ? "var(--primary-100)" : "#ede9fe", color: item.deliveryMode === "Delivery by Own" ? "var(--primary-800)" : "#6d28d9", padding: "0.2rem 0.6rem", borderRadius: "9999px" }}>
                           🚚 {item.deliveryMode}
                         </span>
+                        {/* Urgency / countdown badge */}
+                        {urgency && (
+                          <span style={{ fontSize: "0.75rem", fontWeight: 800, background: urgency.bg, color: urgency.color, padding: "0.2rem 0.7rem", borderRadius: "9999px", animation: "pulse 1.5s infinite" }}>
+                            {urgency.label}
+                          </span>
+                        )}
                       </div>
 
                       {/* Food Quantity displayed in place of the food name */}
@@ -243,7 +267,8 @@ export const ReceiverPage = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

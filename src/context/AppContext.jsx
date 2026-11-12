@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const AppContext = createContext(null);
 
@@ -128,6 +128,41 @@ export const AppProvider = ({ children }) => {
 
   const [ngos] = useState(INITIAL_NGOS);
 
+  // ─────────────────────────────────────────────────────────────
+  // AUTO-EXPIRY ENGINE
+  // Runs every 30 seconds. Any donation whose dateTimeExpiry has
+  // passed and is still "Available" gets moved to "Expired"
+  // status so it vanishes from the Receiver page and surfaces on
+  // the Eco-Farm expired panel.
+  // ─────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const expire = () => {
+      setDonations(prev => {
+        const now = Date.now();
+        let changed = false;
+        const updated = prev.map(d => {
+          if (
+            d.status === "Available" &&
+            d.dateTimeExpiry &&
+            new Date(d.dateTimeExpiry).getTime() <= now
+          ) {
+            changed = true;
+            return { ...d, status: "Expired", expiredAt: new Date().toISOString() };
+          }
+          return d;
+        });
+        if (changed) {
+          localStorage.setItem("fb_donations_list", JSON.stringify(updated));
+          return updated;
+        }
+        return prev;
+      });
+    };
+    expire(); // run immediately on mount
+    const timer = setInterval(expire, 30000); // then every 30 s
+    return () => clearInterval(timer);
+  }, []);
+
   // Sync theme
   useEffect(() => {
     localStorage.setItem("fb_theme", theme);
@@ -250,6 +285,7 @@ export const AppProvider = ({ children }) => {
         login,
         logout,
         donations,
+        expiredDonations: donations.filter(d => d.status === "Expired"),
         addDonation,
         acceptFoodRequest,
         completeDonation,
