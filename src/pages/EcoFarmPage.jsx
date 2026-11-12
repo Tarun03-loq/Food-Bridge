@@ -75,7 +75,6 @@ export const EcoFarmPage = () => {
   const availableCount = listings.filter(l => l.status === "Available").length;
   const reservedCount = listings.filter(l => l.status === "Reserved").length;
   const totalFoodRescued = listings.length * 45;
-  const ngoCount = 6;
 
   const tabStyle = (id) => ({
     padding: "0.55rem 1rem",
@@ -141,9 +140,6 @@ export const EcoFarmPage = () => {
               </span>
             )}
           </button>
-          <button style={tabStyle("ngos")} onClick={() => setActiveTab("ngos")}>
-            <Users size={15} /> NGO Partners
-          </button>
           <button style={tabStyle("profile")} onClick={() => setActiveTab("profile")}>
             <Sprout size={15} /> Farm Profile
           </button>
@@ -186,10 +182,9 @@ export const EcoFarmPage = () => {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
               {[
                 { icon: <Package size={22} />, label: "Active Listings",    value: availableCount,    color: "#16a34a", bg: "#dcfce7" },
-                { icon: <Clock size={22} />,   label: "Reserved by NGOs",   value: reservedCount,     color: "#d97706", bg: "#fef9c3" },
-                { icon: <TrendingUp size={22} />, label: "Meals Facilitated", value: totalFoodRescued, color: "#2563eb", bg: "#dbeafe" },
-                { icon: <Users size={22} />,   label: "Partner NGOs",       value: ngoCount,          color: "#9333ea", bg: "#f3e8ff" },
-                { icon: <AlertTriangle size={22} />, label: "Expired Donations (from donors)", value: expiredCount, color: "#dc2626", bg: "#fee2e2" }
+                { icon: <Clock size={22} />,   label: "Reserved Listings",  value: reservedCount,     color: "#d97706", bg: "#fef9c3" },
+                { icon: <TrendingUp size={22} />, label: "Estimated Yield (kg)", value: totalFoodRescued, color: "#2563eb", bg: "#dbeafe" },
+                { icon: <AlertTriangle size={22} />, label: "Expired Donations Diverted", value: expiredCount, color: "#dc2626", bg: "#fee2e2" }
               ].map((stat, i) => (
                 <div key={i} className="fb-card" style={{ padding: "1.25rem", display: "flex", alignItems: "center", gap: "1rem" }}>
                   <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: stat.bg, color: stat.color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -213,10 +208,10 @@ export const EcoFarmPage = () => {
                   <PlusCircle size={16} /> Post Surplus Produce
                 </button>
                 <button className="btn btn-outline" onClick={() => setActiveTab("expired")} style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: expiredCount > 0 ? "#dc2626" : undefined, borderColor: expiredCount > 0 ? "#fca5a5" : undefined }}>
-                  <AlertTriangle size={16} /> View Expired Food {expiredCount > 0 && `(${expiredCount})`}
+                  <AlertTriangle size={16} /> View Expired Food for Upcycling {expiredCount > 0 && `(${expiredCount})`}
                 </button>
-                <button className="btn btn-outline" onClick={() => setActiveTab("ngos")} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <Users size={16} /> View NGO Partners
+                <button className="btn btn-outline" onClick={() => setActiveTab("listings")} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <ShoppingBasket size={16} /> Manage Produce Listings
                 </button>
               </div>
             </div>
@@ -559,41 +554,6 @@ export const EcoFarmPage = () => {
           </div>
         )}
 
-        {/* ── NGO PARTNERS ── */}
-        {activeTab === "ngos" && (
-          <div>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h2 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--primary-800)" }}>NGO Partner Network</h2>
-              <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>NGOs that accept farm surplus and distribute to communities</p>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1rem" }}>
-              {[
-                { name: "Hope Feeding Foundation",  contact: "Dr. Sister Clara",  phone: "+91 94480 55667", area: "Shivajinagar, Bangalore",  capacity: "600 meals/day",   accepts: "Vegetables, Fruits, Cooked food" },
-                { name: "Annapoorna Seva Trust",    contact: "Raghavendra Rao",   phone: "+91 97412 88990", area: "Jayanagar, Bangalore",     capacity: "1,200 meals/day", accepts: "All produce, Grains, Dairy" },
-                { name: "Robin Hood Army",          contact: "Arjun Verma",       phone: "+91 98800 12345", area: "Indiranagar, Bangalore",   capacity: "800 meals/day",   accepts: "Raw vegetables, Fruits" },
-                { name: "Aahwahan Food Bank",       contact: "Meera Nair",        phone: "+91 98450 77112", area: "Koramangala, Bangalore",   capacity: "500 meals/day",   accepts: "Packaged produce, Grains" },
-                { name: "Akshaya Seva Samithi",     contact: "S. Venkatesh",      phone: "+91 98111 23456", area: "Malleshwaram, Bangalore",  capacity: "950 meals/day",   accepts: "All types of produce" },
-                { name: "Rotary Food Mission",      contact: "Kavitha Reddy",     phone: "+91 99000 44321", area: "Whitefield, Bangalore",    capacity: "750 meals/day",   accepts: "Fruits, Vegetables, Dairy" }
-              ].map((ngo, i) => (
-                <div key={i} className="fb-card" style={{ padding: "1.25rem", borderLeft: "4px solid #16a34a" }}>
-                  <div style={{ fontWeight: 800, fontSize: "1rem", color: "var(--primary-800)", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                    <Users size={16} color="#16a34a" /> {ngo.name}
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem", color: "var(--text-muted)" }}>
-                    <div>👤 {ngo.contact}</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><Phone size={13} /> {ngo.phone}</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><MapPin size={13} /> {ngo.area}</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><TrendingUp size={13} color="#16a34a" /> Capacity: {ngo.capacity}</div>
-                    <div style={{ background: "#dcfce7", color: "#166534", padding: "0.4rem 0.6rem", borderRadius: "6px", fontSize: "0.75rem", fontWeight: 600, marginTop: "0.25rem" }}>
-                      ✅ Accepts: {ngo.accepts}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* ── PROFILE ── */}
         {activeTab === "profile" && (
           <div style={{ maxWidth: "680px" }}>
@@ -629,10 +589,10 @@ export const EcoFarmPage = () => {
                 </div>
                 <ul style={{ color: "#166534", fontSize: "0.82rem", marginTop: "0.5rem", paddingLeft: "1.25rem", lineHeight: 1.8 }}>
                   <li>Post unlimited surplus produce listings</li>
-                  <li>Connect directly with verified NGOs</li>
-                  <li>Track collection status in real-time</li>
-                  <li>View all expired food donations for composting / repurposing</li>
-                  <li>Reduce food waste with zero logistics cost</li>
+                  <li>Receive expired food from donors for biogas and compost processing</li>
+                  <li>Track produce and waste collection in real-time</li>
+                  <li>Reduce landfill methane and enrich agricultural soil</li>
+                  <li>Zero waste circular economy management</li>
                 </ul>
               </div>
             </div>
