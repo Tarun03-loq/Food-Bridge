@@ -8,7 +8,8 @@ import {
 } from "lucide-react";
 
 const ECO_FARM_ORG_TYPES = [
-  "Organic Farm", "Community Farm", "Urban Farm / Rooftop Garden",
+  "Organic Farm", "Biogas Production", "Compost",
+  "Community Farm", "Urban Farm / Rooftop Garden",
   "Dairy Farm", "Poultry Farm", "Fishery / Aquafarm", "Other"
 ];
 

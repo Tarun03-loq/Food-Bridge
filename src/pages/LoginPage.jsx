@@ -4,6 +4,8 @@ import { useApp } from "../context/AppContext";
 
 const ECO_FARM_ORG_TYPES = [
   "Organic Farm",
+  "Biogas Production",
+  "Compost",
   "Community Farm",
   "Urban Farm / Rooftop Garden",
   "Dairy Farm",
