@@ -4,7 +4,7 @@ import {
   Leaf, Package, TrendingUp, Users, Phone,
   MapPin, Building, Calendar, LogOut, PlusCircle, CheckCircle,
   Clock, BarChart2, Sprout, ShoppingBasket, ArrowRight, Info,
-  AlertTriangle
+  AlertTriangle, Recycle, Flame
 } from "lucide-react";
 
 const ECO_FARM_ORG_TYPES = [
@@ -221,25 +221,119 @@ export const EcoFarmPage = () => {
               </div>
             </div>
 
-            {/* Recent Listings Preview */}
-            <div className="fb-card" style={{ padding: "1.5rem" }}>
-              <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "var(--primary-800)", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <Package size={18} /> Recent Produce Listings
-              </h3>
-              {listings.slice(0, 3).map(listing => (
-                <div key={listing.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.85rem", background: "var(--bg-main)", borderRadius: "10px", marginBottom: "0.65rem", border: "1px solid var(--border-color)" }}>
-                  <div>
-                    <div style={{ fontWeight: 700, color: "var(--text-main)", fontSize: "0.95rem" }}>{listing.crop}</div>
-                    <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "0.1rem" }}>
-                      📦 {listing.quantity} {listing.unit} · 📍 {listing.location}
+            {/* Bio-Resource Recovery Stream (Expired Food for Biogas, Compost & Soil Regeneration) */}
+            <div className="fb-card" style={{ padding: "1.5rem", borderTop: "4px solid #16a34a" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: "#dcfce7", color: "#166534", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Recycle size={18} />
                     </div>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--primary-800)", margin: 0 }}>
+                      Bio-Resource Recovery Stream (Biogas & Composting)
+                    </h3>
                   </div>
-                  {statusBadge(listing.status)}
+                  <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "0.35rem", lineHeight: 1.5 }}>
+                    Edible deadline completed donations automatically rerouted from NGOs to Eco-Farms for anaerobic biogas digesters, vermicompost, and soil nutrient regeneration.
+                  </p>
                 </div>
-              ))}
-              <button className="btn btn-outline btn-sm" onClick={() => setActiveTab("listings")} style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                View All Listings <ArrowRight size={14} />
-              </button>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ background: expiredCount > 0 ? "#fee2e2" : "#dcfce7", color: expiredCount > 0 ? "#991b1b" : "#166534", padding: "0.3rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 800, display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                    {expiredCount > 0 ? <AlertTriangle size={13} /> : <CheckCircle size={13} />}
+                    {expiredCount} Batch{expiredCount === 1 ? "" : "es"} Diverted for Upcycling
+                  </span>
+                </div>
+              </div>
+
+              {/* Upcycling Pillars Highlights */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
+                <div style={{ background: "#fef3c7", border: "1px solid #fde68a", borderRadius: "10px", padding: "0.75rem 0.9rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#92400e", fontWeight: 800, fontSize: "0.85rem" }}>
+                    <Flame size={16} /> Biogas & Bio-CNG Feedstock
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "#78350f", marginTop: "0.2rem", lineHeight: 1.4 }}>
+                    Ideal for anaerobic digesters to produce clean farm energy and organic slurry.
+                  </div>
+                </div>
+
+                <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: "10px", padding: "0.75rem 0.9rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#065f46", fontWeight: 800, fontSize: "0.85rem" }}>
+                    <Sprout size={16} /> Microbial Soil Compost
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "#047857", marginTop: "0.2rem", lineHeight: 1.4 }}>
+                    High-nitrogen organic matter for vermicomposting & fertile soil replenishment.
+                  </div>
+                </div>
+
+                <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "10px", padding: "0.75rem 0.9rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#1e40af", fontWeight: 800, fontSize: "0.85rem" }}>
+                    <Recycle size={16} /> 100% Landfill Methane Cut
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "#1d4ed8", marginTop: "0.2rem", lineHeight: 1.4 }}>
+                    Zero waste cycle: eliminates greenhouse gas release from dumping rotting food.
+                  </div>
+                </div>
+              </div>
+
+              {/* Display diverted food batches if available */}
+              {expiredCount > 0 ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  <div style={{ fontSize: "0.82rem", fontWeight: 800, color: "var(--text-main)", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                    ⚠️ Batches Ready for Farm Collection & Processing:
+                  </div>
+                  {expiredDonations.slice(0, 3).map(item => (
+                    <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.9rem 1rem", background: "var(--bg-main)", borderRadius: "12px", border: "1px solid var(--border-color)", flexWrap: "wrap", gap: "0.75rem" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                          <span style={{ fontWeight: 800, color: "#991b1b", fontSize: "0.95rem" }}>
+                            📦 {item.quantity}
+                          </span>
+                          <span style={{ background: "#fee2e2", color: "#991b1b", fontSize: "0.7rem", fontWeight: 800, padding: "0.15rem 0.5rem", borderRadius: "20px" }}>
+                            Past Edible Safe Date
+                          </span>
+                          <span style={{ background: "#dcfce7", color: "#166534", fontSize: "0.7rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "20px" }}>
+                            🔥 Biogas / Compost Target
+                          </span>
+                        </div>
+                        <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "0.25rem", display: "flex", flexWrap: "wrap", gap: "0.8rem" }}>
+                          <span>📍 {item.location}</span>
+                          <span>🕒 Expired: {new Date(item.dateTimeExpiry).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          <span>👤 Donor: {item.contactName} ({item.contactPhone})</span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <a href={`tel:${item.contactPhone}`} className="btn btn-outline btn-sm" style={{ textDecoration: "none", fontSize: "0.78rem", padding: "0.4rem 0.8rem" }}>
+                          <Phone size={13} /> Call for Pickup
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem", paddingTop: "0.75rem", borderTop: "1px dashed var(--border-color)" }}>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>
+                      Showing {Math.min(3, expiredCount)} of {expiredCount} diverted batch{expiredCount === 1 ? "" : "es"}
+                    </div>
+                    <button className="btn btn-primary btn-sm" onClick={() => setActiveTab("expired")} style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.82rem" }}>
+                      View All Expired Food for Upcycling <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ padding: "1.5rem", textAlign: "center", background: "var(--bg-main)", borderRadius: "12px", border: "1px dashed var(--border-color)" }}>
+                  <Sprout size={36} color="#16a34a" style={{ margin: "0 auto 0.5rem", opacity: 0.8 }} />
+                  <div style={{ fontWeight: 800, color: "var(--text-main)", fontSize: "0.95rem" }}>
+                    Clean Cycle: No Expired Waste Pending
+                  </div>
+                  <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", maxWidth: "560px", margin: "0.3rem auto 0.8rem", lineHeight: 1.4 }}>
+                    All current donor contributions are within safe consumption timelines and being served to NGOs. As soon as any batch completes its safe expiry, it will automatically vanish from the NGO interface and surface here for Biogas & Compost conversion.
+                  </p>
+                  <button className="btn btn-outline btn-sm" onClick={() => setActiveTab("expired")} style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem" }}>
+                    <AlertTriangle size={14} /> Open Upcycling Logs
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
