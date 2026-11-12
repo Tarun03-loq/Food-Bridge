@@ -131,10 +131,10 @@ export const EcoFarmPage = () => {
             <ShoppingBasket size={15} /> My Listings
           </button>
           <button style={tabStyle("expired")} onClick={() => setActiveTab("expired")}>
-            <AlertTriangle size={15} />
-            Expired Food
+            <Recycle size={15} />
+            Eco-Resources
             {expiredCount > 0 && (
-              <span style={{ background: "#dc2626", color: "white", borderRadius: "9999px", fontSize: "0.68rem", fontWeight: 900, padding: "0.1rem 0.45rem", marginLeft: "0.1rem" }}>
+              <span style={{ background: "#16a34a", color: "white", borderRadius: "9999px", fontSize: "0.68rem", fontWeight: 900, padding: "0.1rem 0.45rem", marginLeft: "0.1rem" }}>
                 {expiredCount}
               </span>
             )}
@@ -183,7 +183,7 @@ export const EcoFarmPage = () => {
                 { icon: <Package size={22} />, label: "Active Listings",    value: availableCount,    color: "#16a34a", bg: "#dcfce7" },
                 { icon: <Clock size={22} />,   label: "Reserved Listings",  value: reservedCount,     color: "#d97706", bg: "#fef9c3" },
                 { icon: <TrendingUp size={22} />, label: "Estimated Yield (kg)", value: totalFoodRescued, color: "#2563eb", bg: "#dbeafe" },
-                { icon: <AlertTriangle size={22} />, label: "Expired Donations Diverted", value: expiredCount, color: "#dc2626", bg: "#fee2e2" }
+                { icon: <AlertTriangle size={22} />, label: "Eco-Resources Diverted", value: expiredCount, color: "#16a34a", bg: "#dcfce7" }
               ].map((stat, i) => (
                 <div key={i} className="fb-card" style={{ padding: "1.25rem", display: "flex", alignItems: "center", gap: "1rem" }}>
                   <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: stat.bg, color: stat.color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -206,8 +206,8 @@ export const EcoFarmPage = () => {
                 <button className="btn btn-primary" onClick={() => { setActiveTab("listings"); setShowAddListing(true); }} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   <PlusCircle size={16} /> Post Surplus Produce
                 </button>
-                <button className="btn btn-outline" onClick={() => setActiveTab("expired")} style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: expiredCount > 0 ? "#dc2626" : undefined, borderColor: expiredCount > 0 ? "#fca5a5" : undefined }}>
-                  <AlertTriangle size={16} /> View Expired Food for Upcycling {expiredCount > 0 && `(${expiredCount})`}
+                <button className="btn btn-outline" onClick={() => setActiveTab("expired")} style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: expiredCount > 0 ? "#16a34a" : undefined, borderColor: expiredCount > 0 ? "#86efac" : undefined }}>
+                  <Recycle size={16} /> View Eco-Resources {expiredCount > 0 && `(${expiredCount})`}
                 </button>
                 <button className="btn btn-outline" onClick={() => setActiveTab("listings")} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   <ShoppingBasket size={16} /> Manage Produce Listings
@@ -310,7 +310,7 @@ export const EcoFarmPage = () => {
                       Showing {Math.min(3, expiredCount)} of {expiredCount} diverted batch{expiredCount === 1 ? "" : "es"}
                     </div>
                     <button className="btn btn-primary btn-sm" onClick={() => setActiveTab("expired")} style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.82rem" }}>
-                      View All Expired Food for Upcycling <ArrowRight size={14} />
+                      View All Eco-Resources <ArrowRight size={14} />
                     </button>
                   </div>
                 </div>
@@ -451,36 +451,35 @@ export const EcoFarmPage = () => {
           </div>
         )}
 
-        {/* ── EXPIRED FOOD (from donor donations) ── */}
+        {/* ── ECO-RESOURCES (UPCYCLING STREAM) ── */}
         {activeTab === "expired" && (
           <div>
             <div style={{ marginBottom: "1.5rem" }}>
-              <h2 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#b91c1c", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <AlertTriangle size={22} color="#dc2626" /> Expired Food Donations
+              <h2 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#166534", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Recycle size={22} color="#16a34a" /> Eco-Resources
               </h2>
               <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginTop: "0.3rem" }}>
-                These food items passed their safe-use deadline and were automatically removed from the NGO receiver feed.
-                They appear here so eco-farms can assess whether any food is still usable (e.g. for composting, animal feed, or biogas).
+                These organic surplus batches have completed their safe-consumption window for food relief and are converted into eco-resources for biogas digesters, vermicompost, and soil conditioning.
               </p>
             </div>
 
             {expiredCount === 0 ? (
               <div className="fb-card" style={{ textAlign: "center", padding: "3rem 1rem", color: "var(--text-muted)" }}>
                 <CheckCircle size={48} style={{ margin: "0 auto 0.75rem", opacity: 0.3, color: "#16a34a" }} />
-                <p style={{ fontWeight: 700, fontSize: "1rem" }}>No expired donations right now! 🎉</p>
-                <p style={{ fontSize: "0.85rem", marginTop: "0.3rem" }}>All food donations are within their safe-use deadline.</p>
+                <p style={{ fontWeight: 700, fontSize: "1rem" }}>No diverted eco-resources currently pending! 🎉</p>
+                <p style={{ fontSize: "0.85rem", marginTop: "0.3rem" }}>All current donor donations are within their fresh consumption window.</p>
               </div>
             ) : (
               <>
                 {/* Summary banner */}
-                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: "14px", padding: "1rem 1.25rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <AlertTriangle size={28} color="#dc2626" style={{ flexShrink: 0 }} />
+                <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: "14px", padding: "1rem 1.25rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+                  <Recycle size={28} color="#16a34a" style={{ flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontWeight: 800, color: "#b91c1c", fontSize: "1rem" }}>
-                      {expiredCount} food donation{expiredCount > 1 ? "s" : ""} expired and removed from the NGO interface
+                    <div style={{ fontWeight: 800, color: "#166534", fontSize: "1rem" }}>
+                      {expiredCount} Eco-Resource Batch{expiredCount > 1 ? "es" : ""} Diverted for Upcycling
                     </div>
-                    <div style={{ fontSize: "0.82rem", color: "#7f1d1d", marginTop: "0.2rem" }}>
-                      These were automatically moved here when their expiry time passed. Donors have been implicitly notified via status change.
+                    <div style={{ fontSize: "0.82rem", color: "#14532d", marginTop: "0.2rem" }}>
+                      Automatically transitioned from human relief to circular bio-energy and organic compost feeds.
                     </div>
                   </div>
                 </div>
