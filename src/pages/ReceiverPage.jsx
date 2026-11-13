@@ -17,9 +17,10 @@ import {
   Check
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { translateHeading } from "../utils/headingTranslations";
 
 export const ReceiverPage = () => {
-  const { currentUser, donations, acceptFoodRequest, completeDonation } = useApp();
+  const { currentUser, donations, acceptFoodRequest, completeDonation, headingLang } = useApp();
 
   // Helper: returns urgency badge props for a donation nearing its expiry
   const getExpiryUrgency = (expiryStr) => {
@@ -225,10 +226,13 @@ export const ReceiverPage = () => {
                         )}
                       </div>
 
-                      {/* Food Quantity displayed in place of the food name */}
-                      <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginTop: "0.5rem", color: "var(--primary-700)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      {/* Food Variety & Quantity */}
+                      <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginTop: "0.5rem", color: "var(--primary-700)", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
                         <Package size={20} />
-                        <span>Quantity: {item.quantity}</span>
+                        {item.foodVariety && (
+                          <span style={{ color: "var(--text-main)" }}>{item.foodVariety} —</span>
+                        )}
+                        <span>{item.quantity}</span>
                       </h4>
 
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "1.25rem", fontSize: "0.85rem", color: "var(--text-muted)", marginTop: "0.5rem" }}>
@@ -293,9 +297,12 @@ export const ReceiverPage = () => {
                       </span>
                     </div>
 
-                    <h5 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--primary-700)", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <h5 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--primary-700)", display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
                       <Package size={18} />
-                      <span>Quantity: {item.quantity}</span>
+                      {item.foodVariety && (
+                        <span style={{ color: "var(--text-main)" }}>{item.foodVariety} —</span>
+                      )}
+                      <span>{item.quantity}</span>
                     </h5>
 
                     <div style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "0.2rem" }}>

@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodBridge — Save Food, Share Hope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ==================== THEME VARIABLES ==================== */
+:root {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --primary-light: #ecfdf5;
+    --accent: #047857;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #ecfdf5 0%, #f9fafb 100%);
+    --bg-body: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --card-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #10b981;
+    --btn-primary-hover: #059669;
+    --btn-request: #0284c7;
+    --btn-request-hover: #0369a1;
+    --stat-num: #059669;
+    --badge-bg: #d1fae5;
+    --badge-color: #065f46;
+    --ring: rgba(16, 185, 129, 0.25);
+}
+
+body.theme-ocean {
+    --primary: #0284c7;
+    --primary-dark: #0369a1;
+    --primary-light: #f0f9ff;
+    --accent: #0ea5e9;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #e0f2fe 0%, #f8fafc 100%);
+    --bg-body: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --card-border: #e2e8f0;
+    --card-shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #0284c7;
+    --btn-primary-hover: #0369a1;
+    --btn-request: #2563eb;
+    --btn-request-hover: #1d4ed8;
+    --stat-num: #0284c7;
+    --badge-bg: #e0f2fe;
+    --badge-color: #0369a1;
+    --ring: rgba(2, 132, 199, 0.25);
+}
+
+body.theme-sunset {
+    --primary: #f97316;
+    --primary-dark: #ea580c;
+    --primary-light: #fff7ed;
+    --accent: #c2410c;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #ffedd5 0%, #fafaf9 100%);
+    --bg-body: #fafaf9;
+    --text-main: #1c1917;
+    --text-muted: #78716c;
+    --card-border: #e7e5e4;
+    --card-shadow: 0 4px 20px -2px rgba(249, 115, 22, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #ea580c;
+    --btn-primary-hover: #c2410c;
+    --btn-request: #b45309;
+    --btn-request-hover: #92400e;
+    --stat-num: #ea580c;
+    --badge-bg: #ffedd5;
+    --badge-color: #9a3412;
+    --ring: rgba(234, 88, 12, 0.25);
+}
+
+body.theme-dark {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --primary-light: #064e3b;
+    --accent: #34d399;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #1e293b 0%, #0f172a 100%);
+    --bg-body: #0b0f17;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --card-bg: #131b2e;
+    --card-border: #1e293b;
+    --card-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    --btn-primary: #10b981;
+    --btn-primary-hover: #059669;
+    --btn-request: #38bdf8;
+    --btn-request-hover: #0284c7;
+    --stat-num: #34d399;
+    --badge-bg: rgba(16, 185, 129, 0.15);
+    --badge-color: #6ee7b7;
+    --ring: rgba(16, 185, 129, 0.35);
+}
+
+body.theme-purple {
+    --primary: #8b5cf6;
+    --primary-dark: #7c3aed;
+    --primary-light: #f5f3ff;
+    --accent: #6d28d9;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #ede9fe 0%, #fafafa 100%);
+    --bg-body: #fafafa;
+    --text-main: #1e1b4b;
+    --text-muted: #6b7280;
+    --card-border: #e5e7eb;
+    --card-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #7c3aed;
+    --btn-primary-hover: #6d28d9;
+    --btn-request: #4f46e5;
+    --btn-request-hover: #4338ca;
+    --stat-num: #7c3aed;
+    --badge-bg: #ede9fe;
+    --badge-color: #6d28d9;
+    --ring: rgba(124, 58, 237, 0.25);
+}
+
+body.theme-teal {
+    --primary: #0d9488;
+    --primary-dark: #0f766e;
+    --primary-light: #f0fdfa;
+    --accent: #115e59;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #ccfbf1 0%, #f8fafc 100%);
+    --bg-body: #f8fafc;
+    --text-main: #134e4a;
+    --text-muted: #64748b;
+    --card-border: #e2e8f0;
+    --card-shadow: 0 4px 20px -2px rgba(13, 148, 136, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #0d9488;
+    --btn-primary-hover: #0f766e;
+    --btn-request: #0284c7;
+    --btn-request-hover: #0369a1;
+    --stat-num: #0d9488;
+    --badge-bg: #ccfbf1;
+    --badge-color: #0f766e;
+    --ring: rgba(13, 148, 136, 0.25);
+}
+
+body.theme-berry {
+    --primary: #e11d48;
+    --primary-dark: #be123c;
+    --primary-light: #fff1f2;
+    --accent: #9f1239;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #ffe4e6 0%, #fafafa 100%);
+    --bg-body: #fafafa;
+    --text-main: #4c0519;
+    --text-muted: #881337;
+    --card-border: #fecdd3;
+    --card-shadow: 0 4px 20px -2px rgba(225, 29, 72, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #e11d48;
+    --btn-primary-hover: #be123c;
+    --btn-request: #9333ea;
+    --btn-request-hover: #7e22ce;
+    --stat-num: #e11d48;
+    --badge-bg: #ffe4e6;
+    --badge-color: #9f1239;
+    --ring: rgba(225, 29, 72, 0.25);
+}
+
+body.theme-golden {
+    --primary: #d97706;
+    --primary-dark: #b45309;
+    --primary-light: #fef3c7;
+    --accent: #92400e;
+    --hero-bg: radial-gradient(120% 120% at 50% 0%, #fef3c7 0%, #fafaf9 100%);
+    --bg-body: #fafaf9;
+    --text-main: #451a03;
+    --text-muted: #78350f;
+    --card-border: #fde68a;
+    --card-shadow: 0 4px 20px -2px rgba(217, 119, 6, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --btn-primary: #d97706;
+    --btn-primary-hover: #b45309;
+    --btn-request: #0284c7;
+    --btn-request-hover: #0369a1;
+    --stat-num: #b45309;
+    --badge-bg: #fef3c7;
+    --badge-color: #92400e;
+    --ring: rgba(217, 119, 6, 0.25);
+}
+
+/* ==================== GLOBAL RESET ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease, box-shadow 0.2s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==================== THEME BAR ==================== */
+.theme-bar {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 8px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.theme-pill-container {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.theme-pill {
+    padding: 4px 11px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff;
+    opacity: 0.85;
+    transition: all 0.2s ease;
+}
+
+.theme-pill:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.theme-pill.active {
+    opacity: 1;
+    border-color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    transform: scale(1.04);
+}
+
+/* ==================== NAVBAR ==================== */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--primary);
+    color: white;
+    padding: 14px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.logo-badge {
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+nav a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+nav a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-cta {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    margin-left: 8px;
+}
+
+.nav-cta:hover {
+    background: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero {
+    background: var(--hero-bg);
+    padding: 55px 7% 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    border-bottom: 1px solid var(--card-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 580px;
+}
+
+.hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.hero-pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.15); }
+}
+
+.hero h1 {
+    font-size: 46px;
+    color: var(--primary-dark);
+    margin-bottom: 16px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: var(--text-muted);
+    font-size: 16.5px;
+    line-height: 1.65;
+    margin-bottom: 24px;
+}
+
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: var(--btn-primary);
+    color: white;
+    border: none;
+    padding: 13px 26px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--btn-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+}
+
+.btn-secondary {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-color: var(--primary);
+}
+
+.hero-image-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.hero img {
+    width: 320px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.18);
+    border: 5px solid var(--card-bg);
+    display: block;
+}
+
+.hero-floating-card {
+    position: absolute;
+    bottom: -15px;
+    left: -20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 10px 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* ==================== DASHBOARD STATS ==================== */
+.dashboard {
+    padding: 35px 7% 10px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-header span.tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 22px 24px;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(0,0,0,0.08);
+}
+
+.stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stat-card p {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.stat-card h3 {
+    color: var(--stat-num);
+    font-size: 38px;
+    margin-top: 10px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.stat-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--card-border);
+}
+
+/* ==================== MAIN 2-COLUMN SECTION ==================== */
+.main {
+    padding: 25px 7% 40px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.card h2 {
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-badge {
+    background: var(--badge-bg);
+    color: var(--badge-color);
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+}
+
+label span.req {
+    color: #ef4444;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3.5px var(--ring);
+}
+
+input::placeholder {
+    color: #94a3b8;
+    font-size: 13.5px;
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+/* ==================== FOOD LISTINGS (NGO) ==================== */
+.ngo-controls {
+    background: var(--primary-light);
+    border: 1px solid var(--card-border);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.food-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.food-item {
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    padding: 18px 20px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.food-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px -4px rgba(0,0,0,0.08);
+}
+
+.food-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.food-item h3 {
+    color: var(--text-main);
+    font-size: 16.5px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.food-category-pill {
+    background: var(--badge-bg);
+    color: var(--badge-color);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    margin-bottom: 14px;
+}
+
+.food-detail {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.food-detail strong {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.food-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px dashed var(--card-border);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.status {
+    color: var(--stat-num);
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--badge-bg);
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.request-btn {
+    background: var(--btn-request);
+    color: white;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.request-btn:hover {
+    background: var(--btn-request-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.request-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* ==================== TOAST NOTIFICATION ==================== */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #0f172a;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 4px solid var(--primary);
+    max-width: 360px;
+}
+
+.toast.toast-error {
+    border-left-color: #ef4444;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+footer h2 {
+    font-size: 24px;
+    margin-bottom: 6px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+footer p {
+    font-size: 13.5px;
+    opacity: 0.9;
+    margin: 4px 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width: 980px) {
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    .main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 40px 6%;
+    }
+    .hero h1 {
+        font-size: 34px;
+    }
+    .hero img {
+        width: 100%;
+        max-width: 340px;
+    }
+    .hero-floating-card {
+        bottom: -10px;
+        left: 10px;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+    nav {
+        padding: 12px 5%;
+    }
+    nav a {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body class="theme-ocean">
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- 8 THEMES COLOR SWITCHER BAR -->
+<div class="theme-bar">
+    <div style="font-weight: 800; display:flex; align-items:center; gap:6px;">
+        <span>🎨 Select Design Theme:</span>
+    </div>
+    <div class="theme-pill-container">
+        <button class="theme-pill" onclick="setTheme('default', this)" style="background:#10b981;">🌿 Classic Green</button>
+        <button class="theme-pill active" onclick="setTheme('ocean', this)" style="background:#0284c7;">🌊 Ocean Blue</button>
+        <button class="theme-pill" onclick="setTheme('sunset', this)" style="background:#ea580c;">🌅 Sunset Orange</button>
+        <button class="theme-pill" onclick="setTheme('dark', this)" style="background:#1f2937; border: 1px solid #10b981;">🌙 Cyber Dark</button>
+        <button class="theme-pill" onclick="setTheme('purple', this)" style="background:#7c3aed;">🔮 Royal Purple</button>
+        <button class="theme-pill" onclick="setTheme('teal', this)" style="background:#0d9488;">💎 Modern Teal</button>
+        <button class="theme-pill" onclick="setTheme('berry', this)" style="background:#be123c;">🍓 Berry Crimson</button>
+        <button class="theme-pill" onclick="setTheme('golden', this)" style="background:#b45309;">🍯 Golden Amber</button>
+    </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="logo">
+        <span>🌱 FoodBridge</span>
+        <span class="logo-badge">Pro Prototype</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#supplier">Supplier</a>
+        <a href="#ngo">NGO</a>
+        <a href="http://localhost:3000/" target="_blank" class="nav-cta">Full React App ↗</a>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+
+    <div class="hero-content">
+        <div class="hero-pill">
+            <span class="hero-pill-dot"></span>
+            <span>Live Surplus Food Rescue Network</span>
+        </div>
+
+        <h1>Save Food,<br><span>Share Hope!</span></h1>
+
+        <p>
+            FoodBridge seamlessly connects commercial food suppliers (hotels, restaurants, supermarkets)
+            with verified NGOs and hunger relief organizations in real time to eliminate food waste and feed communities.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#supplier" class="btn">
+                <span>Donate Food Now</span>
+                <span>→</span>
+            </a>
+            <a href="#ngo" class="btn btn-secondary">
+                <span>Explore NGO Listings</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="hero-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&auto=format&fit=crop&q=80"
+             alt="Fresh healthy prepared food">
+        <div class="hero-floating-card">
+            <span style="font-size: 20px;">🥗</span>
+            <div>
+                <div style="font-weight: 800; color: var(--primary);">1,250+ Meals</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Rescued this week</div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard" id="dashboard">
+
+    <div class="section-header">
+        <h2>📊 Real-Time Impact Dashboard</h2>
+        <span class="tag">Live updates from donor & NGO transactions</span>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <p>Total Donations</p>
+                <div class="stat-icon">📦</div>
+            </div>
+            <h3 id="total">0</h3>
+            <div class="stat-footer">
+                <span>Cumulative lifetime batches</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <p>Available Food</p>
+                <div class="stat-icon">🟢</div>
+            </div>
+            <h3 id="available">0</h3>
+            <div class="stat-footer">
+                <span>Ready for instant collection</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <p>Requested Food</p>
+                <div class="stat-icon">🚚</div>
+            </div>
+            <h3 id="requested">0</h3>
+            <div class="stat-footer">
+                <span>Claimed by verified NGOs</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <p>Delivered Food</p>
+                <div class="stat-icon">✅</div>
+            </div>
+            <h3 id="delivered">0</h3>
+            <div class="stat-footer">
+                <span>Successfully distributed</span>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- SUPPLIER AND NGO -->
+<section class="main">
+
+    <!-- SUPPLIER -->
+    <div class="card" id="supplier">
+
+        <div class="card-header">
+            <h2>🍱 Supplier — Donate Food</h2>
+            <span class="card-badge">Donor Portal</span>
+        </div>
+
+        <form id="foodForm">
+
+            <div class="form-group">
+                <label for="supplierName">Supplier / Restaurant Name <span class="req">*</span></label>
+                <input type="text" id="supplierName"
+                       placeholder="e.g. Grand Palace Hotel, Indiranagar" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="foodName">Food Title <span class="req">*</span></label>
+                    <input type="text" id="foodName"
+                           placeholder="e.g. Vegetable Biryani & Dal" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Food Category <span class="req">*</span></label>
+                    <select id="category" required>
+                        <option value="">Select category</option>
+                        <option>Cooked Meals</option>
+                        <option>Fruits</option>
+                        <option>Vegetables</option>
+                        <option>Bakery</option>
+                        <option>Packed Food</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantity">Quantity / Servings <span class="req">*</span></label>
+                    <input type="text" id="quantity"
+                           placeholder="e.g. 40 meals / 15 kg" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Pickup Location <span class="req">*</span></label>
+                    <input type="text" id="location"
+                           placeholder="e.g. Koramangala 5th Block" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pickup">Pickup Window Time <span class="req">*</span></label>
+                    <input type="datetime-local" id="pickup" required>
+                </div>
+                <div class="form-group">
+                    <label for="expiry">Safe Until (Expiry) <span class="req">*</span></label>
+                    <input type="datetime-local" id="expiry" required>
+                </div>
+            </div>
+
+            <button class="btn btn-full" type="submit">
+                <span>+ Post Available Food</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- NGO -->
+    <div class="card" id="ngo">
+
+        <div class="card-header">
+            <h2>🤝 NGO — Collect Food</h2>
+            <span class="card-badge">Receiver Portal</span>
+        </div>
+
+        <div class="ngo-controls">
+            <label for="ngoName">Your Registered NGO Name <span class="req">*</span></label>
+            <input type="text" id="ngoName"
+                   placeholder="Enter your NGO / Trust name before requesting (e.g. Robin Hood Army)"
+                   style="margin-bottom: 0;">
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+            <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main);">Available Surplus Donations</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">Real-time listings</span>
+        </div>
+
+        <div id="foodList" class="food-list-container"></div>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <h2>🌱 FoodBridge</h2>
+    <p>Save Food • Share Hope • Reduce Waste</p>
+    <p style="font-size: 12px; opacity: 0.75; margin-top: 8px;">© 2026 FoodBridge. All rights reserved.</p>
+</footer>
+
+<script>
+// TOAST HELPER
+function showToast(message, isError = false) {
+    const container = document.getElementById("toastContainer");
+    const toast = document.createElement("div");
+    toast.className = "toast" + (isError ? " toast-error" : "");
+    toast.innerHTML = `<span>${isError ? '⚠️' : '✅'}</span> <span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
+}
+
+// THEME SWITCHER FUNCTION
+function setTheme(themeName, btn) {
+    document.body.className = '';
+    if (themeName !== 'default') {
+        document.body.classList.add('theme-' + themeName);
+    }
+    document.querySelectorAll('.theme-pill').forEach(p => p.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    localStorage.setItem('foodbridge_theme', themeName);
+}
+
+// RESTORE SAVED THEME
+const savedTheme = localStorage.getItem('foodbridge_theme') || 'ocean';
+const matchBtn = Array.from(document.querySelectorAll('.theme-pill')).find(b => b.getAttribute('onclick')?.includes("'" + savedTheme + "'"));
+setTheme(savedTheme, matchBtn);
+
+// FOOD DATABASE IN BROWSER
+let foods = JSON.parse(
+    localStorage.getItem("foodbridge")
+) || [];
+
+// Prepopulate demo items if empty so user sees data immediately
+if (foods.length === 0) {
+    foods = [
+        {
+            id: 1,
+            supplier: "Grand Palace Hotel",
+            name: "Vegetable Biryani & Dal",
+            category: "Cooked Meals",
+            quantity: "35 meals",
+            location: "MG Road, Indiranagar",
+            expiry: new Date(Date.now() + 6 * 3600000).toISOString(),
+            pickup: new Date(Date.now() + 2 * 3600000).toISOString(),
+            status: "Available"
+        },
+        {
+            id: 2,
+            supplier: "City Bakers",
+            name: "Fresh Whole Wheat Breads & Rolls",
+            category: "Bakery",
+            quantity: "20 packets",
+            location: "Koramangala 4th Block",
+            expiry: new Date(Date.now() + 14 * 3600000).toISOString(),
+            pickup: new Date(Date.now() + 3 * 3600000).toISOString(),
+            status: "Available"
+        }
+    ];
+    saveData();
+}
+
+// SAVE DATA
+function saveData() {
+    localStorage.setItem(
+        "foodbridge",
+        JSON.stringify(foods)
+    );
+}
+
+// ADD FOOD
+document.getElementById("foodForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let food = {
+        id: Date.now(),
+        supplier: document.getElementById("supplierName").value.trim(),
+        name: document.getElementById("foodName").value.trim(),
+        category: document.getElementById("category").value,
+        quantity: document.getElementById("quantity").value.trim(),
+        location: document.getElementById("location").value.trim(),
+        expiry: document.getElementById("expiry").value,
+        pickup: document.getElementById("pickup").value,
+        status: "Available"
+    };
+
+    let now = new Date();
+
+    if (new Date(food.expiry) <= now) {
+        showToast("Please enter a future safe-until time!", true);
+        return;
+    }
+
+    if (new Date(food.pickup) <= now) {
+        showToast("Please enter a future pickup time!", true);
+        return;
+    }
+
+    if (new Date(food.pickup) > new Date(food.expiry)) {
+        showToast("Pickup must be before the safe-until deadline!", true);
+        return;
+    }
+
+    foods.unshift(food); // place at top of list
+    saveData();
+    displayFoods();
+    this.reset();
+    showToast("Food batch successfully posted and visible to NGOs!");
+});
+
+// DISPLAY FOOD
+function displayFoods() {
+    let list = document.getElementById("foodList");
+    list.innerHTML = "";
+
+    if (foods.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">🍲</div>
+                <div style="font-weight:700;">No active food donations yet</div>
+                <div style="font-size:12px; margin-top:4px;">Post surplus food using the supplier form on the left!</div>
+            </div>
+        `;
+    }
+
+    foods.forEach(function(food) {
+        let item = document.createElement("div");
+        item.className = "food-item";
+
+        // Header: Title + Category Pill
+        let header = document.createElement("div");
+        header.className = "food-header";
+
+        let title = document.createElement("h3");
+        title.textContent = "🍲 " + food.name;
+        header.appendChild(title);
+
+        let catPill = document.createElement("span");
+        catPill.className = "food-category-pill";
+        catPill.textContent = food.category || "General";
+        header.appendChild(catPill);
+
+        item.appendChild(header);
+
+        // Details Grid
+        let grid = document.createElement("div");
+        grid.className = "food-grid";
+
+        const pickupDate = new Date(food.pickup);
+        const expiryDate = new Date(food.expiry);
+        const formatOpts = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+
+        grid.innerHTML = `
+            <div class="food-detail"><span>🏢</span> <span>Supplier: <strong>${escapeHtml(food.supplier)}</strong></span></div>
+            <div class="food-detail"><span>📦</span> <span>Quantity: <strong>${escapeHtml(food.quantity)}</strong></span></div>
+            <div class="food-detail"><span>📍</span> <span>Location: <strong>${escapeHtml(food.location)}</strong></span></div>
+            <div class="food-detail"><span>⏰</span> <span>Pickup: <strong>${pickupDate.toLocaleString([], formatOpts)}</strong></span></div>
+            <div class="food-detail" style="grid-column: 1 / -1;"><span>⏳</span> <span>Safe Until: <strong>${expiryDate.toLocaleString([], formatOpts)}</strong></span></div>
+        `;
+        item.appendChild(grid);
+
+        // Footer: Status + Action Button
+        let footer = document.createElement("div");
+        footer.className = "food-footer";
+
+        let status = document.createElement("div");
+        status.className = "status";
+        const dot = document.createElement("span");
+        dot.className = "status-dot";
+        status.appendChild(dot);
+
+        const statusText = document.createTextNode(
+            food.status === "Requested" && food.ngo ? `Requested by ${food.ngo}` : `Status: ${food.status}`
+        );
+        status.appendChild(statusText);
+        footer.appendChild(status);
+
+        if (food.status === "Available") {
+            let button = document.createElement("button");
+            button.className = "request-btn";
+            button.innerHTML = "<span>Request Food</span> <span>→</span>";
+
+            button.onclick = function() {
+                let ngoInput = document.getElementById("ngoName");
+                let ngo = ngoInput.value.trim();
+                if (!ngo) {
+                    showToast("Please enter your NGO name above first!", true);
+                    ngoInput.focus();
+                    return;
+                }
+
+                food.status = "Requested";
+                food.ngo = ngo;
+                saveData();
+                displayFoods();
+                showToast(`Success! Batch requested for ${ngo}.`);
+            };
+
+            footer.appendChild(button);
+        }
+
+        item.appendChild(footer);
+        list.appendChild(item);
+    });
+
+    // UPDATE DASHBOARD COUNTERS
+    document.getElementById("total").textContent = foods.length;
+    document.getElementById("available").textContent = foods.filter(f => f.status === "Available").length;
+    document.getElementById("requested").textContent = foods.filter(f => f.status === "Requested").length;
+    document.getElementById("delivered").textContent = foods.filter(f => f.status === "Delivered").length;
+}
+
+// XSS Sanitizer helper
+function escapeHtml(text) {
+    if (!text) return "";
+    return String(text).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+    });
+}
+
+// INITIAL DISPLAY
+displayFoods();
+</script>
+
+</body>
+</html>

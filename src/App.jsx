@@ -5,6 +5,8 @@ import { DonorPage } from "./pages/DonorPage";
 import { ReceiverPage } from "./pages/ReceiverPage";
 import { NearbyNgosMap } from "./pages/NearbyNgosMap";
 import { EcoFarmPage } from "./pages/EcoFarmPage";
+import { LanguageToggle } from "./components/LanguageToggle";
+import { translateHeading } from "./utils/headingTranslations";
 import { 
   HeartHandshake, 
   LogOut, 
@@ -19,7 +21,7 @@ import {
 } from "lucide-react";
 
 export function App() {
-  const { currentUser, logout, theme, setTheme } = useApp();
+  const { currentUser, logout, theme, setTheme, headingLang } = useApp();
   
   // Navigation for Donor: "donor-form" or "nearby-map"
   const [donorActiveNav, setDonorActiveNav] = useState("donor-form");
@@ -63,9 +65,11 @@ export function App() {
           </div>
           <div>
             <h1 style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--primary-800)", lineHeight: 1.1 }}>
-              FoodBridge
+              {translateHeading("FoodBridge", headingLang)}
             </h1>
-            <p style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontWeight: 600 }}>Save Food. Share Hope.</p>
+            <p style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontWeight: 600 }}>
+              {translateHeading("Save Food. Share Hope.", headingLang)}
+            </p>
           </div>
         </div>
 
@@ -116,9 +120,12 @@ export function App() {
           </div>
         )}
 
-        {/* Right Section: Theme Selector + User Capsule & Sign out */}
+        {/* Right Section: Language Toggle + Theme Selector + User Capsule & Sign out */}
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           
+          {/* Heading Language Toggle (English / Tamil) */}
+          <LanguageToggle />
+
           {/* Dynamic Theme Switcher Dropdown (8 Themes Available) */}
           <div style={{ position: "relative" }}>
             <button

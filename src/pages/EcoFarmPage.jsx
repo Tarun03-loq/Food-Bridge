@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useApp } from "../context/AppContext";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { translateHeading } from "../utils/headingTranslations";
+import { analyzeEcoResourceWithAI } from "../utils/foodAI";
 import {
   Leaf, Package, TrendingUp, Users, Phone,
   MapPin, Building, Calendar, LogOut, PlusCircle, CheckCircle,
   Clock, BarChart2, Sprout, ShoppingBasket, ArrowRight, Info,
-  AlertTriangle, Recycle, Flame
+  AlertTriangle, Recycle, Flame, Bot, Sparkles, Fuel, Zap
 } from "lucide-react";
 
 const ECO_FARM_ORG_TYPES = [
@@ -35,7 +38,7 @@ const SAMPLE_LISTINGS = [
 ];
 
 export const EcoFarmPage = () => {
-  const { currentUser, logout, donations, expiredDonations } = useApp();
+  const { currentUser, logout, donations, expiredDonations, headingLang } = useApp();
 
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showAddListing, setShowAddListing] = useState(false);
@@ -49,6 +52,16 @@ export const EcoFarmPage = () => {
 
   // expiredDonations comes from AppContext (food donations posted by donors that expired)
   const expiredCount = expiredDonations ? expiredDonations.length : 0;
+
+  // State for AI Eco-Resource query / simulator
+  const [aiFoodQuery, setAiFoodQuery] = useState("");
+  const [selectedExpiredBatch, setSelectedExpiredBatch] = useState(null);
+
+  // Active AI analysis object
+  const ecoAiAnalysis = useMemo(() => {
+    const targetItem = selectedExpiredBatch || (expiredDonations && expiredDonations[0]) || { quantity: "50 kg", foodVariety: "Mixed Leftover Rice & Gravy" };
+    return analyzeEcoResourceWithAI({ item: targetItem, foodQuery: aiFoodQuery });
+  }, [selectedExpiredBatch, expiredDonations, aiFoodQuery]);
 
   const handleAddListing = (e) => {
     e.preventDefault();
@@ -117,7 +130,9 @@ export const EcoFarmPage = () => {
             <Leaf size={22} />
           </div>
           <div>
-            <h1 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#166534", lineHeight: 1.1 }}>Eco-Farm Portal</h1>
+            <h1 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#166534", lineHeight: 1.1 }}>
+              {translateHeading("Eco-Farm Portal", headingLang)}
+            </h1>
             <p style={{ fontSize: "0.68rem", color: "var(--text-muted)", fontWeight: 600 }}>Farm-to-NGO Surplus Bridge</p>
           </div>
         </div>
@@ -146,6 +161,7 @@ export const EcoFarmPage = () => {
 
         {/* Right */}
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <LanguageToggle />
           <div style={{ textAlign: "right" }}>
             <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text-main)" }}>{currentUser?.name}</div>
             <div style={{ fontSize: "0.7rem", color: "#16a34a", fontWeight: 700, textTransform: "uppercase" }}>🌿 Eco-Farm Partner</div>
@@ -456,11 +472,132 @@ export const EcoFarmPage = () => {
           <div>
             <div style={{ marginBottom: "1.5rem" }}>
               <h2 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#166534", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <Recycle size={22} color="#16a34a" /> Eco-Resources
+                <Recycle size={22} color="#16a34a" /> {translateHeading("Eco-Resources", headingLang)}
               </h2>
               <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginTop: "0.3rem" }}>
                 These organic surplus batches have completed their safe-consumption window for food relief and are converted into eco-resources for biogas digesters, vermicompost, and soil conditioning.
               </p>
+            </div>
+
+            {/* AI ECO-RESOURCE CONVERSION ADVISORY PANEL */}
+            <div className="fb-card animate-fade-in" style={{ border: "2px solid #16a34a", background: "var(--bg-card)", borderRadius: "16px", padding: "1.5rem", marginBottom: "1.75rem", position: "relative", overflow: "hidden", boxShadow: "0 8px 24px rgba(22, 163, 74, 0.08)" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: "linear-gradient(90deg, #16a34a, #d97706, #0284c7)" }} />
+              
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div style={{ width: "42px", height: "42px", borderRadius: "12px", background: "#dcfce7", color: "#166534", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Bot size={24} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#166534", margin: 0 }}>
+                      {translateHeading("AI Eco-Resource Transformation Advisory", headingLang)}
+                    </h3>
+                    <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", margin: "2px 0 0" }}>
+                      Intelligent bio-conversion analysis calculating biogas yield, rich compost, and liquid bio-fertilizer.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick Simulation Input */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <input 
+                    type="text"
+                    className="form-control"
+                    placeholder="Test food e.g. Dosa, Rice, Dal..."
+                    value={aiFoodQuery}
+                    onChange={e => setAiFoodQuery(e.target.value)}
+                    style={{ padding: "0.35rem 0.75rem", fontSize: "0.8rem", width: "220px", borderRadius: "8px" }}
+                  />
+                  {["Dosa", "Rice", "Dal / Curry", "Bread"].map(preset => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setAiFoodQuery(preset)}
+                      className="btn btn-outline btn-sm"
+                      style={{ fontSize: "0.72rem", padding: "0.3rem 0.55rem", borderRadius: "9999px" }}
+                    >
+                      + {preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bio-metric yield counters */}
+              {ecoAiAnalysis && (
+                <div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
+                    <div style={{ background: "rgba(22, 163, 74, 0.08)", padding: "0.85rem", borderRadius: "10px", border: "1px solid rgba(22, 163, 74, 0.2)" }}>
+                      <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#166534", textTransform: "uppercase" }}>Analyzed Biomass</div>
+                      <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text-main)", marginTop: "2px" }}>{ecoAiAnalysis.quantity}</div>
+                      <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>{ecoAiAnalysis.biomassType}</div>
+                    </div>
+
+                    <div style={{ background: "rgba(217, 119, 6, 0.08)", padding: "0.85rem", borderRadius: "10px", border: "1px solid rgba(217, 119, 6, 0.2)" }}>
+                      <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#b45309", textTransform: "uppercase" }}>Biogas Energy Potential</div>
+                      <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#b45309", marginTop: "2px" }}>{ecoAiAnalysis.metrics.biogasM3}</div>
+                      <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>equiv. {ecoAiAnalysis.metrics.lpgEquivalentKg} LPG fuel</div>
+                    </div>
+
+                    <div style={{ background: "rgba(30, 64, 175, 0.08)", padding: "0.85rem", borderRadius: "10px", border: "1px solid rgba(30, 64, 175, 0.2)" }}>
+                      <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#1e40af", textTransform: "uppercase" }}>Cured Organic Compost</div>
+                      <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#1e40af", marginTop: "2px" }}>{ecoAiAnalysis.metrics.compostYieldKg}</div>
+                      <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>dry cured soil carbon</div>
+                    </div>
+
+                    <div style={{ background: "rgba(13, 148, 136, 0.08)", padding: "0.85rem", borderRadius: "10px", border: "1px solid rgba(13, 148, 136, 0.2)" }}>
+                      <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#0f766e", textTransform: "uppercase" }}>Liquid Bio-Fertilizer</div>
+                      <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0f766e", marginTop: "2px" }}>{ecoAiAnalysis.metrics.liquidFertilizerLitres}</div>
+                      <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>mineral-rich digestate</div>
+                    </div>
+                  </div>
+
+                  {/* Transformation Output Cards with Images */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+                    {ecoAiAnalysis.transformationProducts.map((prod, idx) => (
+                      <div key={idx} style={{ background: "var(--bg-main)", borderRadius: "12px", border: "1px solid var(--border-color)", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                        <div style={{ position: "relative", height: "135px", width: "100%", overflow: "hidden" }}>
+                          <img 
+                            src={prod.image} 
+                            alt={prod.name}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                          <span style={{ position: "absolute", bottom: "8px", left: "8px", background: "rgba(0,0,0,0.72)", color: "#ffffff", padding: "0.2rem 0.6rem", borderRadius: "9999px", fontSize: "0.68rem", fontWeight: 700, backdropFilter: "blur(4px)" }}>
+                            {prod.badge}
+                          </span>
+                        </div>
+
+                        <div style={{ padding: "1rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                          <div>
+                            <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#16a34a", textTransform: "uppercase" }}>
+                              {prod.type}
+                            </div>
+                            <h4 style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text-main)", margin: "0.2rem 0 0.5rem" }}>
+                              {prod.name}
+                            </h4>
+                            <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.45, margin: 0 }}>
+                              {prod.details}
+                            </p>
+                          </div>
+
+                          <div style={{ marginTop: "0.85rem", paddingTop: "0.75rem", borderTop: "1px solid var(--border-color)", fontSize: "0.75rem" }}>
+                            <div style={{ color: "var(--primary-700)", fontWeight: 800 }}>
+                              ⚡ Output Yield: {prod.yieldEstimate}
+                            </div>
+                            <div style={{ color: "var(--text-muted)", marginTop: "2px" }}>
+                              ⚙️ Process: {prod.process}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ marginTop: "1rem", padding: "0.75rem 1rem", background: "rgba(22, 163, 74, 0.06)", borderRadius: "8px", border: "1px solid rgba(22, 163, 74, 0.2)", fontSize: "0.78rem", color: "#166534" }}>
+                    🌱 <strong>Safe Handling Protocol:</strong> {ecoAiAnalysis.safeHandlingAdvisory}
+                  </div>
+                </div>
+              )}
             </div>
 
             {expiredCount === 0 ? (
@@ -532,14 +669,26 @@ export const EcoFarmPage = () => {
                           )}
                         </div>
 
-                        {/* Action suggestions */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", minWidth: "160px" }}>
+                        {/* Action suggestions & AI Trigger */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", minWidth: "170px" }}>
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            onClick={() => {
+                              setSelectedExpiredBatch(item);
+                              setAiFoodQuery(item.foodVariety || item.quantity);
+                            }}
+                            style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", background: "#16a34a", borderColor: "#16a34a" }}
+                          >
+                            <Bot size={14} /> Analyze with AI
+                          </button>
+                          
                           <div style={{ background: "#fef9c3", border: "1px solid #fde68a", borderRadius: "10px", padding: "0.75rem", fontSize: "0.78rem", color: "#78350f" }}>
-                            <div style={{ fontWeight: 800, marginBottom: "0.35rem" }}>♻️ Suggested Use</div>
+                            <div style={{ fontWeight: 800, marginBottom: "0.35rem" }}>♻️ Primary Uses</div>
                             <ul style={{ paddingLeft: "1rem", margin: 0, lineHeight: 1.8 }}>
-                              <li>Compost / biogas</li>
-                              <li>Animal feed (if safe)</li>
-                              <li>Soil enrichment</li>
+                              <li>Biogas clean fuel</li>
+                              <li>Vermicompost soil</li>
+                              <li>Liquid fertilizer</li>
                             </ul>
                           </div>
                         </div>

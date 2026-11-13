@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { HeartHandshake, Utensils, Users, Lock, Mail, Phone, MapPin, Building, ArrowRight, Leaf } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { translateHeading } from "../utils/headingTranslations";
 
 const ECO_FARM_ORG_TYPES = [
   "Organic Farm",
@@ -15,7 +17,7 @@ const ECO_FARM_ORG_TYPES = [
 ];
 
 export const LoginPage = () => {
-  const { login } = useApp();
+  const { login, headingLang } = useApp();
   const [selectedRole, setSelectedRole] = useState("donor"); // "donor" | "receiver" | "ecofarm"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -83,7 +85,12 @@ export const LoginPage = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-gradient)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg-gradient)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "1.5rem", position: "relative" }}>
+      {/* Top Language Toggle */}
+      <div style={{ position: "absolute", top: "1.5rem", right: "2rem" }}>
+        <LanguageToggle />
+      </div>
+
       <div className="fb-card animate-fade-in" style={{ width: "100%", maxWidth: "520px", padding: "2rem", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.15)", borderRadius: "20px" }}>
         
         {/* Brand Header */}
@@ -91,8 +98,12 @@ export const LoginPage = () => {
           <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "var(--primary-600)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.75rem", boxShadow: "0 8px 16px rgba(0,0,0, 0.15)" }}>
             <HeartHandshake size={32} />
           </div>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--primary-800)" }}>FoodBridge</h1>
-          <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 600 }}>Save Food. Share Hope.</p>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--primary-800)" }}>
+            {translateHeading("FoodBridge", headingLang)}
+          </h1>
+          <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 600 }}>
+            {translateHeading("Save Food. Share Hope.", headingLang)}
+          </p>
         </div>
 
         {/* Role Selector Tabs (Donor | Receiver | Eco-Farm) */}
